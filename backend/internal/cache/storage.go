@@ -1,20 +1,24 @@
 package cache
 
 import (
+	"backend/internal/model"
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const (
+	todoListCollection = "todoListCollection"
+	todoListDatabase   = "todoListDatabase"
+)
+
 type Repository interface {
-	SetValue(key, value string) error
-	GetValue(key string) (string, error)
-	UpdateValue(key, newValue string) error
-	DeleteValue(key string) error
+	SetValue(value model.TodoListModel) error
+	GetAllValues() ([]model.TodoListModel, error)
 }
 
 type Cache struct {
-	client *mongo.Client
+	collection *mongo.Collection
 }
 
 func New(mongoURI string) (*Cache, error) {
@@ -27,7 +31,8 @@ func New(mongoURI string) (*Cache, error) {
 		return nil, err
 	}
 
+	collection := mongoClient.Database(todoListDatabase).Collection(todoListCollection)
 	return &Cache{
-		client: mongoClient,
+		collection: collection,
 	}, nil
 }
