@@ -15,3 +15,9 @@ type GetTodoListByTitle struct {
 }
 
 type UpdateTodoList [updateFieldsNumber]model.TodoListModel
+
+type RegisterUserRequestBody struct {
+	Login         string `json:"login"`
+	Password      string `json:"password"`
+	AgainPassword string `json:"again_password"`
+}

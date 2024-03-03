@@ -22,6 +22,7 @@ func MethodValidationMiddleware(logger *zap.SugaredLogger, httpMethod string, ne
 				return
 			}
 		} else {
+			logger.Infof("метод: %s, запрос: %v", r.Method, r)
 			next.ServeHTTP(w, r)
 		}
 	}

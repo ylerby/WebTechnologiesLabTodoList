@@ -2,29 +2,45 @@ package database
 
 import (
 	"backend/internal/model"
-	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"os"
 )
 
-func (s *Sql) Connect() error {
-	var err error
-	dsn := "host=" + os.Getenv("POSTGRES_HOST") +
-		" user=" + os.Getenv("POSTGRES_USER") +
-		" password=" + os.Getenv("POSTGRES_PASSWORD") +
-		" dbname=" + os.Getenv("POSTGRES_DB") +
-		" port=" + os.Getenv("POSTGRES_PORT") +
-		" sslmode=disable"
+func (d *Database) CreateUser(login, password string) (bool, error) {
+	var alreadyExists model.UserModel
 
-	s.DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return fmt.Errorf("ошибка при подключении к БД - %s", err)
+	queryResult := d.DB.Where("login = ?", login).Find(&alreadyExists)
+	if err := queryResult.Error; err != nil {
+		return false, err
 	}
 
-	err = s.DB.AutoMigrate(&model.UserModel{})
-	if err != nil {
-		return fmt.Errorf("ошибка при миграции - %s", err)
+	if queryResult.RowsAffected != 0 {
+		return true, nil
 	}
-	return nil
+
+	user := &model.UserModel{
+		Login:    login,
+		Password: password,
+	}
+
+	queryResult = d.DB.Create(user)
+
+	if err := queryResult.Error; err != nil {
+		return false, err
+	}
+
+	return false, nil
+}
+
+func (d *Database) GetUser(login string) (*model.UserModel, bool, error) {
+	var result model.UserModel
+
+	queryResult := d.DB.Where("login = ?", login).Find(&result)
+	if err := queryResult.Error; err != nil {
+		return nil, true, err
+	}
+
+	if queryResult.RowsAffected == 0 {
+		return nil, false, nil
+	}
+
+	return &result, true, nil
 }

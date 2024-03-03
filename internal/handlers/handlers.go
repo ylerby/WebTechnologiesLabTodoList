@@ -5,6 +5,7 @@ import (
 	"backend/internal/model"
 	"backend/internal/response"
 	"backend/internal/schemas"
+	"backend/internal/service"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,10 +13,13 @@ import (
 )
 
 const (
+	minPasswordSize       = 12
+	maxPasswordSize       = 255
 	responseErrorKey      = "Error"
 	successfulValueCreate = "запись успешно создана"
 	successfulValueUpdate = "запись успешно обновлена"
 	successfulValueDelete = "запись успешно удалена"
+	successfulUserCreate  = "пользователь успешно создан"
 )
 
 func (h *Handler) Main(w http.ResponseWriter, _ *http.Request) {
@@ -212,7 +216,6 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//fixme
 	err = h.cache.DeleteValue(currentRequestBody)
 	if err != nil {
 		responseMessage = fmt.Sprintf("%s: ошибка при удалении записи - %s", responseErrorKey, err)
@@ -239,24 +242,140 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
-	var creds auth.Credentials
-	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
+	var responseMessage string
+
+	reader := io.Reader(r.Body)
+	requestBody, err := io.ReadAll(reader)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		return
 	}
 
-	if creds.Username == "admin" && creds.Password == "password" {
-		token, err := auth.GenerateToken(creds.Username)
+	currentRequestBody := auth.Credentials{}
+
+	err = json.Unmarshal(requestBody, &currentRequestBody)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	user, isFound, err := h.database.GetUser(currentRequestBody.Login)
+	if err != nil {
+		h.logger.Errorf("ошибка при получении значения - %s", err)
+		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
+		return
+	}
+
+	if !isFound {
+		responseMessage = fmt.Sprintf("%s: пользователь с таким логином не найден", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
+		return
+	}
+
+	err = service.CompareHashAndPassword(currentRequestBody.Password, user.Password)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusUnauthorized)
+		return
+	} else {
+		token, err := auth.GenerateToken(currentRequestBody.Login)
 		if err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			responseMessage = fmt.Sprintf("%s: ошибка при генерации токена - %s", responseErrorKey, err)
+			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte(token))
-		return
+
+		responseData := schemas.CorrectResponse{
+			Data: token,
+		}
+
+		result, err := json.Marshal(&responseData)
+		if err != nil {
+			responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+			return
+		}
+
+		err = response.CorrectResponseWriter(w, result, http.StatusOK)
+		if err != nil {
+			h.logger.Errorf("ошибка при получении ответа -%s", err)
+			return
+		}
 	}
-	http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 }
 
-func (h *Handler) ProtectedHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Protected content"))
+func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
+	var responseMessage string
+
+	reader := io.Reader(r.Body)
+	requestBody, err := io.ReadAll(reader)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	currentRequestBody := schemas.RegisterUserRequestBody{}
+
+	err = json.Unmarshal(requestBody, &currentRequestBody)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	if len(currentRequestBody.Password) < minPasswordSize || len(currentRequestBody.Password) > maxPasswordSize {
+		responseMessage = fmt.Sprintf("%s: некорректная длина пароля. "+
+			"(мин. длина пароля - 12 символов, макс. - 255)", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
+		return
+	}
+
+	if currentRequestBody.Password != currentRequestBody.AgainPassword {
+		responseMessage = fmt.Sprintf("%s: пароли не совпадают", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	hashedPassword, err := service.HashPassword(currentRequestBody.Password)
+	if err != nil {
+		h.logger.Errorf("ошибка при хешировании паролей - %s", err)
+		responseMessage = fmt.Sprintf("%s: ошибка при регистрации", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
+		return
+	}
+
+	alreadyExist, err := h.database.CreateUser(currentRequestBody.Login, hashedPassword)
+	if err != nil {
+		h.logger.Errorf("ошибка при создании пользователя - %s", err)
+		responseMessage = fmt.Sprintf("%s: ошибка при создании пользователя", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	if alreadyExist {
+		responseMessage = fmt.Sprintf("%s: пользователь с таким логином уже существует", responseErrorKey)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
+		return
+	}
+
+	responseData := schemas.CorrectResponse{
+		Data: successfulUserCreate,
+	}
+
+	result, err := json.Marshal(&responseData)
+	if err != nil {
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+		return
+	}
+
+	err = response.CorrectResponseWriter(w, result, http.StatusOK)
+	if err != nil {
+		h.logger.Errorf("ошибка при получении ответа -%s", err)
+		return
+	}
 }

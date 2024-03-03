@@ -7,11 +7,11 @@ import (
 var jwtKey = []byte("secret_key")
 
 type Credentials struct {
-	Username string `json:"username"`
+	Login    string `json:"login"`
 	Password string `json:"password"`
 }
 
 type Claims struct {
-	Username string `json:"username"`
+	Login string `json:"login"`
 	jwt.StandardClaims
 }

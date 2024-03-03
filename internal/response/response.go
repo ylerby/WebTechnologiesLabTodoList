@@ -7,7 +7,6 @@ const (
 	contentType = "application/json"
 )
 
-// CorrectResponseWriter todo: logger or return error interface
 func CorrectResponseWriter(w http.ResponseWriter, data []byte, statusCode int) error {
 	w.Header().Set(headerKey, contentType)
 	w.WriteHeader(statusCode)

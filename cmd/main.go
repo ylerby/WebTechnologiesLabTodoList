@@ -49,7 +49,7 @@ func main() {
 
 	appLogger.Infof("инициализация базы данных - %v", appDatabase)
 
-	appHandlers := handlers.New(appCache, appLogger)
+	appHandlers := handlers.New(appDatabase, appCache, appLogger)
 	app := application.New(appHandlers.InitRoutes())
 
 	go func() {

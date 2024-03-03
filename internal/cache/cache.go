@@ -45,7 +45,7 @@ func (c *Cache) GetValueByTitle(title string) ([]model.TodoListModel, error) {
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
 		err = cursor.Close(ctx)
 		if err != nil {
-			//todo: fixthat
+			return
 		}
 	}(cursor, ctx)
 
@@ -81,7 +81,7 @@ func (c *Cache) GetAllValues() ([]model.TodoListModel, error) {
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
 		err = cursor.Close(ctx)
 		if err != nil {
-
+			return
 		}
 	}(cursor, ctx)
 

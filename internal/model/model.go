@@ -8,6 +8,6 @@ type TodoListModel struct {
 }
 
 type UserModel struct {
-	Login    string `gorm:"primaryKey;type:varchar(255)"`
-	Password string `gorm:"type:varchar(255)"`
+	Login    string `gorm:"primaryKey;column:login;type:varchar(255)"`
+	Password string `gorm:"column:password;type:varchar(255)"`
 }
