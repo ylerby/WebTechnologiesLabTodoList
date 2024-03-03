@@ -2,6 +2,10 @@ package app
 
 import "net/http"
 
+const (
+	serverAddress = "localhost:8080"
+)
+
 type Application struct {
 	server *http.Server
 }
@@ -9,7 +13,7 @@ type Application struct {
 func New(router http.Handler) *Application {
 	return &Application{
 		server: &http.Server{
-			Addr:    "localhost:8080",
+			Addr:    serverAddress,
 			Handler: router,
 		},
 	}

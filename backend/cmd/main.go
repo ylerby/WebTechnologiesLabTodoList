@@ -43,10 +43,7 @@ func main() {
 	app := application.New(appHandlers.InitRoutes())
 
 	go func() {
-		err = app.Run()
-		if err != nil {
-			appLogger.Fatalf("ошибка при запуске сервера - %s", err)
-		}
+		_ = app.Run()
 	}()
 
 	stop := make(chan os.Signal, 1)

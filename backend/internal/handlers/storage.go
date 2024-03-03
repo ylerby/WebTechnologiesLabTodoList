@@ -25,6 +25,9 @@ func (h *Handler) InitRoutes() http.Handler {
 
 	router.HandleFunc("/", middleware.MethodValidationMiddleware(h.logger, http.MethodGet, h.Main))
 	router.HandleFunc("/create_todo_list", middleware.MethodValidationMiddleware(h.logger, http.MethodPost, h.CreateTodoList))
-	router.HandleFunc("/get_all_todo", middleware.MethodValidationMiddleware(h.logger, http.MethodGet, h.GetAllTodoLists))
+	router.HandleFunc("/get_todo_lists", middleware.MethodValidationMiddleware(h.logger, http.MethodPost, h.GetTodoListByTitle))
+	router.HandleFunc("/get_all_todo_lists", middleware.MethodValidationMiddleware(h.logger, http.MethodGet, h.GetAllTodoLists))
+	router.HandleFunc("/update_todo_list", middleware.MethodValidationMiddleware(h.logger, http.MethodPut, h.UpdateTodoList))
+	router.HandleFunc("/delete_todo_list", middleware.MethodValidationMiddleware(h.logger, http.MethodDelete, h.DeleteTodoList))
 	return router
 }
