@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-type dbInterface interface {
+type DBInterface interface {
 	CreateUser(login, password string) (bool, error)
 	GetUser(login string) (*model.UserModel, bool, error)
 }
@@ -17,7 +17,7 @@ type Database struct {
 	DB *gorm.DB
 }
 
-func New() *Database {
+func New() DBInterface {
 	return &Database{}
 }
 

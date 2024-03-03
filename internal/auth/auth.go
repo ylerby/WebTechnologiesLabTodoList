@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"log"
 	"net/http"
 	"time"
 )
@@ -38,7 +39,12 @@ func AuthorizationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if authHeader == "" {
 			w.Header().Set(headerKey, contentType)
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(missingAuthHeaderMessage))
+			_, err := w.Write([]byte(missingAuthHeaderMessage))
+			if err != nil {
+				log.Printf("ошибка при получении ответа - %s", err)
+				return
+			}
+
 			return
 		}
 
@@ -51,7 +57,12 @@ func AuthorizationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil || !token.Valid {
 			w.Header().Set(headerKey, contentType)
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(unauthorizedMessage))
+			_, err = w.Write([]byte(unauthorizedMessage))
+			if err != nil {
+				log.Printf("ошибка при получении ответа - %s", err)
+				return
+			}
+
 			return
 		}
 
