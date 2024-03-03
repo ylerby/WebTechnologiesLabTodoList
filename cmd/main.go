@@ -16,7 +16,7 @@ import (
 const (
 	appLoggerKey   = "component"
 	appLoggerValue = "todo_list"
-	MongoURI       = "mongodb://mongo:mongo@mongo:27017"
+	MongoUriKey    = "MONGO_URI"
 )
 
 func main() {
@@ -32,6 +32,7 @@ func main() {
 	appLogger := logger.With(zap.String(appLoggerKey, appLoggerValue))
 	appLogger.Info("инициализация логгера")
 
+	MongoURI := os.Getenv(MongoUriKey)
 	appCache, err := cache.New(MongoURI)
 	if err != nil {
 		appLogger.Errorf("ошибка при подключении к mongoDB - %s", err)

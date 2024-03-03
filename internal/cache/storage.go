@@ -25,7 +25,7 @@ type Cache struct {
 	collection *mongo.Collection
 }
 
-func New(mongoURI string) (Repository, error) {
+func New(mongoURI string) (*Cache, error) {
 	ctx := context.Background()
 
 	mongoOptions := options.Client().ApplyURI(mongoURI)

@@ -17,7 +17,7 @@ type Database struct {
 	DB *gorm.DB
 }
 
-func New() DBInterface {
+func New() *Database {
 	return &Database{}
 }
 
