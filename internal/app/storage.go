@@ -3,7 +3,7 @@ package app
 import "net/http"
 
 const (
-	serverAddress = "localhost:8080"
+	serverAddress = ":8080"
 )
 
 type Application struct {

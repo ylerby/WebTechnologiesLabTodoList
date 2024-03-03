@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"backend/internal/auth"
 	"backend/internal/model"
 	"backend/internal/response"
 	"backend/internal/schemas"
@@ -235,4 +236,27 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 		h.logger.Errorf("ошибка при получении ответа -%s", err)
 		return
 	}
+}
+
+func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+	var creds auth.Credentials
+	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	if creds.Username == "admin" && creds.Password == "password" {
+		token, err := auth.GenerateToken(creds.Username)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		w.Write([]byte(token))
+		return
+	}
+	http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+}
+
+func (h *Handler) ProtectedHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Protected content"))
 }

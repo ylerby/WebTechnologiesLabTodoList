@@ -3,6 +3,7 @@ package main
 import (
 	application "backend/internal/app"
 	"backend/internal/cache"
+	"backend/internal/database"
 	"backend/internal/handlers"
 	zapLogger "backend/internal/logger"
 	"go.uber.org/zap"
@@ -15,7 +16,7 @@ import (
 const (
 	appLoggerKey   = "component"
 	appLoggerValue = "todo_list"
-	MongoURI       = "mongodb://localhost:27017"
+	MongoURI       = "mongodb://mongo:mongo@mongo:27017"
 )
 
 func main() {
@@ -38,6 +39,15 @@ func main() {
 	}
 
 	appLogger.Infof("инициализация кеша - %v", appCache)
+
+	appDatabase := database.New()
+	err = appDatabase.Connect()
+	if err != nil {
+		appLogger.Errorf("ошибка при подключении к postgreSQL - %s", err)
+		return
+	}
+
+	appLogger.Infof("инициализация базы данных - %v", appDatabase)
 
 	appHandlers := handlers.New(appCache, appLogger)
 	app := application.New(appHandlers.InitRoutes())

@@ -6,3 +6,8 @@ type TodoListModel struct {
 	Title       string `json:"title" bson:"title"`
 	Description string `json:"description" bson:"description"`
 }
+
+type UserModel struct {
+	Login    string `gorm:"primaryKey;type:varchar(255)"`
+	Password string `gorm:"type:varchar(255)"`
+}
