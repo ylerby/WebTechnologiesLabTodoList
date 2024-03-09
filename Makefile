@@ -18,7 +18,3 @@ full_rebuild:
 	gofumpt -l -w .
 	golangci-lint run
 	docker compose up --force-recreate --build
-pushncommit:
-	git add .
-	git commit -m "v3"
-	git push origin master
