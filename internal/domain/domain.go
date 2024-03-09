@@ -1,5 +1,9 @@
 package domain
 
+const (
+	updateFieldsNumber = 2
+)
+
 type TodoListModel struct {
 	Id          int      `json:"id" bson:"id"`
 	AuthorName  string   `json:"author_name" bson:"author_name"`
@@ -13,16 +17,13 @@ type UserModel struct {
 	Password string `gorm:"column:password;type:varchar(255)"`
 }
 
-const (
-	updateFieldsNumber = 2
-)
-
 type CorrectResponse struct {
 	Data interface{} `json:"data"`
 }
 
 type GetTodoListByTitle struct {
 	Title string `json:"title" bson:"title"`
+	IsCsv bool   `json:"is_csv" bson:"is_csv"`
 }
 
 type UpdateTodoList [updateFieldsNumber]TodoListModel

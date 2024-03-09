@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"backend/internal/handlers"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,6 +15,7 @@ const (
 	contentType              = "application/json"
 	unauthorizedMessage      = "Авторизация не пройдена"
 	missingAuthHeaderMessage = "Отсутствует header авторизации"
+	ResponseErrorKey         = "Error"
 )
 
 func GenerateToken(username string) (string, error) {
@@ -42,7 +42,7 @@ func AuthorizationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if authHeader == "" {
 			w.Header().Set(headerKey, contentType)
 			w.WriteHeader(http.StatusUnauthorized)
-			_, err := w.Write([]byte(fmt.Sprintf("%s: %s", handlers.ResponseErrorKey, missingAuthHeaderMessage)))
+			_, err := w.Write([]byte(fmt.Sprintf("%s: %s", ResponseErrorKey, missingAuthHeaderMessage)))
 			if err != nil {
 				log.Printf("ошибка при получении ответа - %s", err)
 				return
@@ -60,7 +60,7 @@ func AuthorizationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil || !token.Valid {
 			w.Header().Set(headerKey, contentType)
 			w.WriteHeader(http.StatusUnauthorized)
-			_, err = w.Write([]byte(fmt.Sprintf("%s: %s", handlers.ResponseErrorKey, unauthorizedMessage)))
+			_, err = w.Write([]byte(fmt.Sprintf("%s: %s", ResponseErrorKey, unauthorizedMessage)))
 			if err != nil {
 				log.Printf("ошибка при получении ответа - %s", err)
 				return

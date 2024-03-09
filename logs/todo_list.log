@@ -1,0 +1,78 @@
+2024-03-02T15:08:03.411+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T15:08:03.412+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-02T15:10:41.580+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T15:10:46.768+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T15:10:46.769+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140000faee0}	{"component": "todo_list"}
+2024-03-02T20:04:08.476+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T20:04:12.634+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T20:04:12.634+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000172ee0}	{"component": "todo_list"}
+2024-03-02T21:23:57.372+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T21:24:01.605+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T21:24:01.605+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-02T22:04:27.439+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T22:04:34.203+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T22:04:34.204+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-02T23:20:18.042+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T23:20:26.289+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T23:20:26.289+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140001f4ee0}	{"component": "todo_list"}
+2024-03-02T23:54:26.469+0300	FATAL	cmd/main.go:48	ошибка при запуске сервера - http: Server closed	{"component": "todo_list"}
+main.main.func2
+	/Users/marat/GolandProjects/WebTechnologiesLabTodoList/backend/cmd/main.go:48
+2024-03-02T23:54:30.530+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-02T23:54:30.531+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x1400015cee0}	{"component": "todo_list"}
+2024-03-03T02:19:30.871+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T02:19:30.871+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000150ee0}	{"component": "todo_list"}
+2024-03-03T02:21:44.319+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T02:21:44.320+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x1400015cee0}	{"component": "todo_list"}
+2024-03-03T02:26:39.688+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T02:26:39.689+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T02:26:44.882+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T02:26:44.882+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000108ee0}	{"component": "todo_list"}
+2024-03-03T03:19:48.262+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T03:19:48.263+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T03:21:42.491+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T03:21:42.492+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T03:35:24.337+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T03:35:24.338+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140001e6ee0}	{"component": "todo_list"}
+2024-03-03T15:06:22.012+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:06:22.013+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000172ee0}	{"component": "todo_list"}
+2024-03-03T15:37:22.518+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:37:22.519+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000172ee0}	{"component": "todo_list"}
+2024-03-03T15:37:52.052+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:37:52.052+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140000feee0}	{"component": "todo_list"}
+2024-03-03T15:38:39.069+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:38:39.070+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000158ee0}	{"component": "todo_list"}
+2024-03-03T15:39:04.483+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:39:04.483+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140001f2ee0}	{"component": "todo_list"}
+2024-03-03T15:42:39.529+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:42:39.530+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000108ee0}	{"component": "todo_list"}
+2024-03-03T15:45:10.897+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:45:10.898+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x1400015cee0}	{"component": "todo_list"}
+2024-03-03T15:45:59.608+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T15:45:59.608+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000108ee0}	{"component": "todo_list"}
+2024-03-03T16:24:32.929+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T16:24:32.930+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T16:31:29.980+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T16:31:29.981+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140001f2ee0}	{"component": "todo_list"}
+2024-03-03T16:33:59.982+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T16:33:59.983+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140000e0ee0}	{"component": "todo_list"}
+2024-03-03T17:33:23.155+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T17:33:23.156+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T17:34:33.438+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T17:34:33.439+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}
+2024-03-03T17:43:43.015+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T17:43:43.016+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000108ee0}	{"component": "todo_list"}
+2024-03-03T17:44:35.915+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T17:44:35.916+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x140001e6ee0}	{"component": "todo_list"}
+2024-03-03T17:45:29.028+0300	INFO	cmd/main.go:32	инициализация логгера	{"component": "todo_list"}
+2024-03-03T17:45:29.029+0300	INFO	cmd/main.go:40	инициализация кеша - &{0x14000160ee0}	{"component": "todo_list"}

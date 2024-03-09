@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"backend/internal/csv_encoder"
+
 	"backend/internal/auth"
 	"backend/internal/domain"
 	"backend/internal/response"
@@ -16,6 +18,7 @@ const (
 	minPasswordSize         = 12
 	maxPasswordSize         = 255
 	ResponseErrorKey        = "Error"
+	csvResponseFormatKey    = "csv"
 	successfulValueCreate   = "запись успешно создана"
 	successfulValueUpdate   = "запись успешно обновлена"
 	successfulValueDelete   = "запись успешно удалена"
@@ -143,6 +146,21 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if currentRequestBody.IsCsv {
+		err = csv_encoder.Encode(w, todoLists)
+		if err != nil {
+			h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+			responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+			if err != nil {
+				h.logger.Errorf("ошибка при получении ответа -%s", err)
+				return
+			}
+		}
+
+		return
+	}
+
 	responseData := domain.CorrectResponse{
 		Data: todoLists,
 	}
@@ -167,7 +185,7 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) GetAllTodoLists(w http.ResponseWriter, _ *http.Request) {
+func (h *Handler) GetAllTodoLists(w http.ResponseWriter, r *http.Request) {
 	var responseMessage string
 
 	todoLists, err := h.cache.GetAllValues()
@@ -179,6 +197,22 @@ func (h *Handler) GetAllTodoLists(w http.ResponseWriter, _ *http.Request) {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
 			return
 		}
+	}
+
+	format := r.URL.Query().Get("format")
+	if format == csvResponseFormatKey {
+		err = csv_encoder.Encode(w, todoLists)
+		if err != nil {
+			h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+			responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
+			if err != nil {
+				h.logger.Errorf("ошибка при получении ответа -%s", err)
+				return
+			}
+		}
+
+		return
 	}
 
 	responseData := domain.CorrectResponse{
