@@ -1,13 +1,14 @@
 package cache
 
 import (
-	"backend/internal/model"
-	"backend/internal/schemas"
 	"context"
 	"fmt"
+	"time"
+
+	"backend/internal/domain"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"time"
 )
 
 const (
@@ -17,10 +18,11 @@ const (
 	bsonAuthorIdFilterKey    = "author_id"
 	bsonTitleFilterKey       = "title"
 	bsonDescriptionFilterKey = "description"
+	bsonCommentFilterKey     = "comments"
 	contextTimeout           = 10
 )
 
-func (c *Cache) SetValue(value model.TodoListModel) error {
+func (c *Cache) SetValue(value domain.TodoListModel) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
 	defer cancel()
 
@@ -31,7 +33,7 @@ func (c *Cache) SetValue(value model.TodoListModel) error {
 	return nil
 }
 
-func (c *Cache) GetValueByTitle(title string) ([]model.TodoListModel, error) {
+func (c *Cache) GetValueByTitle(title string) ([]domain.TodoListModel, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
 	defer cancel()
 
@@ -49,9 +51,9 @@ func (c *Cache) GetValueByTitle(title string) ([]model.TodoListModel, error) {
 		}
 	}(cursor, ctx)
 
-	var result []model.TodoListModel
+	var result []domain.TodoListModel
 	for cursor.Next(ctx) {
-		var todoList model.TodoListModel
+		var todoList domain.TodoListModel
 		if err = cursor.Decode(&todoList); err != nil {
 			return nil, err
 		}
@@ -69,7 +71,7 @@ func (c *Cache) GetValueByTitle(title string) ([]model.TodoListModel, error) {
 	return result, nil
 }
 
-func (c *Cache) GetAllValues() ([]model.TodoListModel, error) {
+func (c *Cache) GetAllValues() ([]domain.TodoListModel, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
 	defer cancel()
 
@@ -85,9 +87,9 @@ func (c *Cache) GetAllValues() ([]model.TodoListModel, error) {
 		}
 	}(cursor, ctx)
 
-	var result []model.TodoListModel
+	var result []domain.TodoListModel
 	for cursor.Next(ctx) {
-		var todoList model.TodoListModel
+		var todoList domain.TodoListModel
 		if err = cursor.Decode(&todoList); err != nil {
 			return nil, err
 		}
@@ -101,14 +103,14 @@ func (c *Cache) GetAllValues() ([]model.TodoListModel, error) {
 	return result, nil
 }
 
-func (c *Cache) UpdateValue(values schemas.UpdateTodoList) error {
+func (c *Cache) UpdateValue(values domain.UpdateTodoList) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
 	defer cancel()
 
 	update := bson.M{
 		"$set": bson.M{
 			bsonIdFilterKey:          values[valueForUpdateNumber].Id,
-			bsonAuthorIdFilterKey:    values[valueForUpdateNumber].AuthorId,
+			bsonAuthorIdFilterKey:    values[valueForUpdateNumber].AuthorName,
 			bsonTitleFilterKey:       values[valueForUpdateNumber].Title,
 			bsonDescriptionFilterKey: values[valueForUpdateNumber].Description,
 		},
@@ -123,7 +125,7 @@ func (c *Cache) UpdateValue(values schemas.UpdateTodoList) error {
 	return nil
 }
 
-func (c *Cache) DeleteValue(value model.TodoListModel) error {
+func (c *Cache) DeleteValue(value domain.TodoListModel) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
 	defer cancel()
 
@@ -131,5 +133,30 @@ func (c *Cache) DeleteValue(value model.TodoListModel) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c *Cache) SetComment(value domain.TodoListComment) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*contextTimeout)
+	defer cancel()
+
+	filter := bson.M{
+		"id":          value.Id,
+		"author_name": value.AuthorName,
+		"title":       value.Title,
+		"description": value.Description,
+	}
+
+	update := bson.M{
+		"$push": bson.M{
+			bsonCommentFilterKey: value.Comment,
+		},
+	}
+
+	_, err := c.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

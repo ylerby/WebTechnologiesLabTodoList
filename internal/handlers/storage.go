@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"net/http"
+
 	"backend/internal/auth"
 	"backend/internal/cache"
 	"backend/internal/database"
 	"backend/internal/middleware"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 type Handler struct {
@@ -38,6 +39,8 @@ func (h *Handler) InitRoutes() http.Handler {
 		auth.AuthorizationMiddleware(h.UpdateTodoList)))
 	router.HandleFunc("/delete_todo_list", middleware.MethodValidationMiddleware(h.logger, http.MethodDelete,
 		auth.AuthorizationMiddleware(h.DeleteTodoList)))
+	router.HandleFunc("/set_comment", middleware.MethodValidationMiddleware(h.logger, http.MethodPost,
+		auth.AuthorizationMiddleware(h.SetComment)))
 	router.HandleFunc("/login", middleware.MethodValidationMiddleware(h.logger, http.MethodPost, h.Login))
 	router.HandleFunc("/register", middleware.MethodValidationMiddleware(h.logger, http.MethodPost, h.Register))
 	return router

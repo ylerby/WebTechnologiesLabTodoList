@@ -1,16 +1,17 @@
 package main
 
 import (
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+
 	application "backend/internal/app"
 	"backend/internal/cache"
 	"backend/internal/database"
 	"backend/internal/handlers"
 	zapLogger "backend/internal/logger"
 	"go.uber.org/zap"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 const (

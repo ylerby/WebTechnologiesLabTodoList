@@ -1,10 +1,11 @@
 package auth
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 const (

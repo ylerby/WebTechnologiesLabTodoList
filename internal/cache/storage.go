@@ -1,9 +1,10 @@
 package cache
 
 import (
-	"backend/internal/model"
-	"backend/internal/schemas"
 	"context"
+
+	"backend/internal/domain"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -14,11 +15,12 @@ const (
 )
 
 type Repository interface {
-	SetValue(value model.TodoListModel) error
-	GetValueByTitle(title string) ([]model.TodoListModel, error)
-	GetAllValues() ([]model.TodoListModel, error)
-	UpdateValue(values schemas.UpdateTodoList) error
-	DeleteValue(value model.TodoListModel) error
+	SetValue(value domain.TodoListModel) error
+	GetValueByTitle(title string) ([]domain.TodoListModel, error)
+	GetAllValues() ([]domain.TodoListModel, error)
+	UpdateValue(values domain.UpdateTodoList) error
+	DeleteValue(value domain.TodoListModel) error
+	SetComment(value domain.TodoListComment) error
 }
 
 type Cache struct {

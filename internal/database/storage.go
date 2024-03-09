@@ -1,16 +1,18 @@
 package database
 
 import (
-	"backend/internal/model"
 	"fmt"
+	"os"
+
+	"backend/internal/domain"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"os"
 )
 
 type DBInterface interface {
 	CreateUser(login, password string) (bool, error)
-	GetUser(login string) (*model.UserModel, bool, error)
+	GetUser(login string) (*domain.UserModel, bool, error)
 }
 
 type Database struct {
@@ -35,7 +37,7 @@ func (d *Database) Connect() error {
 		return fmt.Errorf("ошибка при подключении к БД - %s", err)
 	}
 
-	err = d.DB.AutoMigrate(&model.UserModel{})
+	err = d.DB.AutoMigrate(&domain.UserModel{})
 	if err != nil {
 		return fmt.Errorf("ошибка при миграции - %s", err)
 	}
