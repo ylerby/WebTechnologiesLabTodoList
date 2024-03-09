@@ -15,7 +15,7 @@ import (
 const (
 	minPasswordSize         = 12
 	maxPasswordSize         = 255
-	responseErrorKey        = "Error"
+	ResponseErrorKey        = "Error"
 	successfulValueCreate   = "запись успешно создана"
 	successfulValueUpdate   = "запись успешно обновлена"
 	successfulValueDelete   = "запись успешно удалена"
@@ -37,8 +37,8 @@ func (h *Handler) CreateTodoList(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -52,8 +52,8 @@ func (h *Handler) CreateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -65,8 +65,8 @@ func (h *Handler) CreateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = h.cache.SetValue(currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при создании записи - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при создании записи - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при создании записи - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при создании записи - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -82,8 +82,8 @@ func (h *Handler) CreateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -105,8 +105,8 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -119,8 +119,8 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 	currentRequestBody := domain.GetTodoListByTitle{}
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -132,8 +132,8 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 
 	todoLists, err := h.cache.GetValueByTitle(currentRequestBody.Title)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при получении записей - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при получении записей - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при получении записей - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при получении записей - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -149,8 +149,8 @@ func (h *Handler) GetTodoListByTitle(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -172,8 +172,8 @@ func (h *Handler) GetAllTodoLists(w http.ResponseWriter, _ *http.Request) {
 
 	todoLists, err := h.cache.GetAllValues()
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при получении всех записей - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при получении всех записей - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при получении всех записей - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при получении всех записей - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -187,8 +187,8 @@ func (h *Handler) GetAllTodoLists(w http.ResponseWriter, _ *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -209,8 +209,8 @@ func (h *Handler) UpdateTodoList(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -224,8 +224,8 @@ func (h *Handler) UpdateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -237,8 +237,8 @@ func (h *Handler) UpdateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = h.cache.UpdateValue(currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при обновлении записи - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при обновлении записи - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при обновлении записи - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при обновлении записи - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -254,8 +254,8 @@ func (h *Handler) UpdateTodoList(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -278,8 +278,8 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -293,8 +293,8 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -306,8 +306,8 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 
 	err = h.cache.DeleteValue(currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при удалении записи - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при удалении записи - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при удалении записи - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при удалении записи - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -323,8 +323,8 @@ func (h *Handler) DeleteTodoList(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -347,8 +347,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -362,8 +362,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -376,7 +376,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	user, isFound, err := h.database.GetUser(currentRequestBody.Login)
 	if err != nil {
 		h.logger.Errorf("ошибка при получении значения - %s", err)
-		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", responseErrorKey)
+		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -387,8 +387,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !isFound {
-		h.logger.Errorf("%s: пользователь с таким логином не найден", responseErrorKey)
-		responseMessage = fmt.Sprintf("%s: пользователь с таким логином не найден", responseErrorKey)
+		h.logger.Errorf("%s: пользователь с таким логином не найден", ResponseErrorKey)
+		responseMessage = fmt.Sprintf("%s: пользователь с таким логином не найден", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -400,8 +400,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	err = service.CompareHashAndPassword(currentRequestBody.Password, user.Password)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при авторизации", responseErrorKey)
-		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", responseErrorKey)
+		h.logger.Errorf("%s: ошибка при авторизации", ResponseErrorKey)
+		responseMessage = fmt.Sprintf("%s: ошибка при авторизации", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusUnauthorized)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -412,8 +412,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	} else {
 		token, err := auth.GenerateToken(currentRequestBody.Login)
 		if err != nil {
-			h.logger.Errorf("%s: ошибка при генерации токена - %s", responseErrorKey, err)
-			responseMessage = fmt.Sprintf("%s: ошибка при генерации токена - %s", responseErrorKey, err)
+			h.logger.Errorf("%s: ошибка при генерации токена - %s", ResponseErrorKey, err)
+			responseMessage = fmt.Sprintf("%s: ошибка при генерации токена - %s", ResponseErrorKey, err)
 			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 			if err != nil {
 				h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -429,8 +429,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 		result, err := json.Marshal(&responseData)
 		if err != nil {
-			h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-			responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+			h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+			responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 			err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 			if err != nil {
 				h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -454,8 +454,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -469,8 +469,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(requestBody, &currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -483,7 +483,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	if len(currentRequestBody.Password) < minPasswordSize || len(currentRequestBody.Password) > maxPasswordSize {
 
 		responseMessage = fmt.Sprintf("%s: некорректная длина пароля. "+
-			"(мин. длина пароля - 12 символов, макс. - 255)", responseErrorKey)
+			"(мин. длина пароля - 12 символов, макс. - 255)", ResponseErrorKey)
 		h.logger.Errorf(responseMessage)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
 		if err != nil {
@@ -495,8 +495,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if currentRequestBody.Password != currentRequestBody.AgainPassword {
-		h.logger.Errorf("%s: пароли не совпадают", responseErrorKey)
-		responseMessage = fmt.Sprintf("%s: пароли не совпадают", responseErrorKey)
+		h.logger.Errorf("%s: пароли не совпадают", ResponseErrorKey)
+		responseMessage = fmt.Sprintf("%s: пароли не совпадают", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -509,7 +509,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := service.HashPassword(currentRequestBody.Password)
 	if err != nil {
 		h.logger.Errorf("ошибка при хешировании паролей - %s", err)
-		responseMessage = fmt.Sprintf("%s: ошибка при регистрации", responseErrorKey)
+		responseMessage = fmt.Sprintf("%s: ошибка при регистрации", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -522,7 +522,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	alreadyExist, err := h.database.CreateUser(currentRequestBody.Login, hashedPassword)
 	if err != nil {
 		h.logger.Errorf("ошибка при создании пользователя - %s", err)
-		responseMessage = fmt.Sprintf("%s: ошибка при создании пользователя", responseErrorKey)
+		responseMessage = fmt.Sprintf("%s: ошибка при создании пользователя", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -533,8 +533,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if alreadyExist {
-		h.logger.Errorf("%s: пользователь с таким логином уже существует", responseErrorKey)
-		responseMessage = fmt.Sprintf("%s: пользователь с таким логином уже существует", responseErrorKey)
+		h.logger.Errorf("%s: пользователь с таким логином уже существует", ResponseErrorKey)
+		responseMessage = fmt.Sprintf("%s: пользователь с таким логином уже существует", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusBadRequest)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -550,8 +550,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -574,8 +574,8 @@ func (h *Handler) SetComment(w http.ResponseWriter, r *http.Request) {
 	reader := io.Reader(r.Body)
 	requestBody, err := io.ReadAll(reader)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при чтении тела запроса - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -588,8 +588,8 @@ func (h *Handler) SetComment(w http.ResponseWriter, r *http.Request) {
 	currentRequestBody := &domain.TodoListComment{}
 	err = json.Unmarshal(requestBody, currentRequestBody)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при десериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -602,7 +602,7 @@ func (h *Handler) SetComment(w http.ResponseWriter, r *http.Request) {
 	err = h.cache.SetComment(*currentRequestBody)
 	if err != nil {
 		h.logger.Errorf("ошибка при создании комментария - %s", err)
-		responseMessage = fmt.Sprintf("%s: ошибка при добавлении комментария", responseErrorKey)
+		responseMessage = fmt.Sprintf("%s: ошибка при добавлении комментария", ResponseErrorKey)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusServiceUnavailable)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
@@ -618,8 +618,8 @@ func (h *Handler) SetComment(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(&responseData)
 	if err != nil {
-		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
-		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", responseErrorKey, err)
+		h.logger.Errorf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
+		responseMessage = fmt.Sprintf("%s: ошибка при сериализации объекта - %s", ResponseErrorKey, err)
 		err = response.ErrorResponseWriter(w, []byte(responseMessage), http.StatusInternalServerError)
 		if err != nil {
 			h.logger.Errorf("ошибка при получении ответа -%s", err)
